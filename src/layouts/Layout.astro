@@ -1,0 +1,171 @@
+---
+import "../styles/global.css";
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = "Nicolas Gurak, développeur web freelance",
+	description = "Je crée des sites qui donnent envie d'appeler. Sites vitrines et outils métier sur mesure pour TPE et PME.",
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+
+// TODO: réseaux (LinkedIn, GitHub...) à confirmer (§12 du brief) pour sameAs.
+const structuredData = {
+	"@context": "https://schema.org",
+	"@type": "ProfessionalService",
+	name: "Nicolas Gurak",
+	description,
+	url: Astro.site?.toString(),
+	areaServed: "FR",
+	address: {
+		"@type": "PostalAddress",
+		addressLocality: "Toulouse",
+		addressCountry: "FR",
+	},
+};
+---
+
+<html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/png" href="/favicon-32.png" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="canonical" href={canonicalUrl} />
+		<meta name="generator" content={Astro.generator} />
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalUrl} />
+		<!-- TODO: image de partage (og:image) à ajouter une fois le logo/photo confirmés (§9, §13 du brief). -->
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+
+		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	</head>
+	<body class="font-sans antialiased">
+		<div
+			id="bg-grid"
+			class="pointer-events-none fixed inset-0 -z-10 bg-[length:120px_100%] bg-[linear-gradient(to_right,rgba(17,17,20,0.05)_1px,transparent_1px)]"
+		>
+		</div>
+		<slot />
+		<div id="cursor-dot" class="pointer-events-none fixed left-0 top-0 z-[9999] h-2 w-2 rounded-full bg-accent opacity-0"></div>
+		<div id="cursor-ring" class="pointer-events-none fixed left-0 top-0 z-[9999] h-8 w-8 rounded-full border border-accent/50 opacity-0"></div>
+	</body>
+</html>
+
+<script>
+	import gsap from "gsap";
+
+	const reducedMotion = window.matchMedia(
+		"(prefers-reduced-motion: reduce)",
+	).matches;
+
+	// Trame de fond vivante, continue sur toute la page (pas seulement le
+	// Hero) pour éviter toute démarcation visible entre sections.
+	const grid = document.getElementById("bg-grid");
+	if (grid && !reducedMotion) {
+		gsap.to(grid, {
+			backgroundPositionX: "120px",
+			duration: 16,
+			ease: "none",
+			repeat: -1,
+		});
+	}
+</script>
+
+<script>
+	import gsap from "gsap";
+
+	const canHover = window.matchMedia("(pointer: fine)").matches;
+	const reducedMotion = window.matchMedia(
+		"(prefers-reduced-motion: reduce)",
+	).matches;
+
+	const dot = document.getElementById("cursor-dot");
+	const ring = document.getElementById("cursor-ring");
+
+	if (canHover && !reducedMotion && dot && ring) {
+		document.documentElement.classList.add("custom-cursor");
+		gsap.set([dot, ring], { xPercent: -50, yPercent: -50 });
+
+		window.addEventListener("pointermove", (event) => {
+			gsap.to(dot, {
+				x: event.clientX,
+				y: event.clientY,
+				opacity: 1,
+				duration: 0.1,
+				ease: "none",
+			});
+			gsap.to(ring, {
+				x: event.clientX,
+				y: event.clientY,
+				opacity: 1,
+				duration: 0.35,
+				ease: "power2.out",
+			});
+		});
+
+		document.querySelectorAll("a, button").forEach((el) => {
+			el.addEventListener("mouseenter", () =>
+				gsap.to(ring, { scale: 1.6, duration: 0.25 }),
+			);
+			el.addEventListener("mouseleave", () =>
+				gsap.to(ring, { scale: 1, duration: 0.25 }),
+			);
+		});
+	} else {
+		dot?.remove();
+		ring?.remove();
+	}
+</script>
+
+<script>
+	import gsap from "gsap";
+	import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	const reducedMotion = window.matchMedia(
+		"(prefers-reduced-motion: reduce)",
+	).matches;
+
+	const sections = new Set(
+		[...document.querySelectorAll("[data-reveal]")]
+			.filter((el) => !el.closest("#hero"))
+			.map((el) => el.closest("section"))
+			.filter((el): el is HTMLElement => el !== null),
+	);
+
+	sections.forEach((section) => {
+		const items = section.querySelectorAll("[data-reveal]");
+
+		if (reducedMotion) {
+			gsap.set(items, { opacity: 1, y: 0 });
+			return;
+		}
+
+		gsap.from(items, {
+			opacity: 0,
+			y: 32,
+			duration: 0.7,
+			ease: "power2.out",
+			stagger: 0.12,
+			scrollTrigger: {
+				trigger: section,
+				start: "top 75%",
+			},
+		});
+	});
+</script>

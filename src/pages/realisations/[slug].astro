@@ -1,0 +1,52 @@
+---
+import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+
+export async function getStaticPaths() {
+	const realisations = await getCollection("realisations");
+	return realisations.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Layout title={`${entry.data.titre} - Nicolas Gurak`} description={entry.data.resume}>
+	<Header />
+	<main class="px-6 py-24 sm:px-10 lg:px-16">
+		<article class="mx-auto w-full max-w-3xl">
+			<a href="/#realisations" class="text-sm font-semibold text-accent"
+				>&larr; Retour aux réalisations</a
+			>
+			<h1 class="mt-6 text-4xl font-black tracking-tight sm:text-5xl">
+				{entry.data.titre}
+			</h1>
+			{
+				entry.data.client && (
+					<p class="mt-2 text-ink/60">Client : {entry.data.client}</p>
+				)
+			}
+			{
+				entry.data.image && (
+					<Image
+						src={entry.data.image}
+						alt={entry.data.titre}
+						width={960}
+						height={540}
+						class="mt-10 w-full rounded-2xl object-cover object-top"
+					/>
+				)
+			}
+			<div class="prose prose-neutral mt-10 max-w-none">
+				<Content />
+			</div>
+		</article>
+	</main>
+	<Footer />
+</Layout>

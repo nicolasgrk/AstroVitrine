@@ -1,0 +1,63 @@
+---
+// Montants et périmètre validés définitivement par Nicolas (§8 du brief) :
+// Essentiel recalé sur 5 pages (la taille réelle moyenne d'un site
+// vitrine), Pro recalé sur ce qui correspond déjà à ses réalisations
+// (Hôtel La Licorne, Le Clos du Rempart).
+const offres = [
+	{
+		nom: "Essentiel",
+		contenu:
+			"Site 5 pages (accueil, services, à propos, réalisations, contact), responsive, formulaire de contact, SEO de base.",
+		prix: "à partir de 1 200 €",
+	},
+	{
+		nom: "Pro",
+		contenu:
+			"Jusqu'à 10 pages, actualités/blog, SEO local, intégrations (réservation, paiement, agenda).",
+		prix: "à partir de 2 400 €",
+		misEnAvant: true,
+	},
+	{
+		nom: "Sur mesure",
+		contenu: "Outils métier, back-office, boutique, automatisations.",
+		prix: "sur devis",
+	},
+];
+---
+
+<section id="offres" class="px-6 py-24 sm:px-10 lg:px-16">
+	<div class="mx-auto w-full max-w-5xl">
+		<h2 class="text-3xl font-black tracking-tight sm:text-5xl">Les formules</h2>
+		<div class="mt-16 grid gap-8 sm:grid-cols-3">
+			{
+				offres.map((offre) => (
+					<div
+						data-reveal
+						class={`relative flex flex-col rounded-2xl border p-8 ${
+							offre.misEnAvant
+								? "border-accent-purple/40 bg-accent-purple/5"
+								: "border-ink/10"
+						}`}
+					>
+						{offre.misEnAvant && (
+							<span class="absolute -top-3 left-8 rounded-full bg-accent-purple px-3 py-1 text-xs font-bold text-white">
+								Le plus courant
+							</span>
+						)}
+						<h3 class="text-lg font-bold">{offre.nom}</h3>
+						<p class="mt-3 flex-1 text-sm text-ink/70">{offre.contenu}</p>
+						<p class="mt-6 text-xl font-black text-accent">{offre.prix}</p>
+					</div>
+				))
+			}
+		</div>
+		<div data-reveal class="mt-8 rounded-2xl border border-accent-purple/30 bg-accent-purple/5 p-8">
+			<h3 class="text-lg font-bold">Option Sérénité</h3>
+			<p class="mt-2 text-sm text-ink/70">
+				Hébergement, mises à jour, sauvegardes et corrections mineures
+				(jusqu'à 30 minutes par mois), à partir de 45 €/mois. Nouvelle
+				fonctionnalité ou refonte de contenu : sur devis à part.
+			</p>
+		</div>
+	</div>
+</section>

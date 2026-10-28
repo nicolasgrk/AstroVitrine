@@ -1,0 +1,42 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout
+	title="Confidentialité - Nicolas Gurak"
+	description="Politique de confidentialité du site de Nicolas Gurak, développeur web freelance."
+>
+	<Header />
+	<main class="px-6 py-24 sm:px-10 lg:px-16">
+		<article class="prose prose-neutral mx-auto w-full max-w-3xl">
+			<h1>Confidentialité</h1>
+
+			<h2>Formulaire de contact</h2>
+			<p>
+				Les informations saisies dans le formulaire de contact (nom, email,
+				message) sont transmises via le service tiers Web3Forms, qui se
+				charge de leur envoi par email. Elles ne sont utilisées que pour
+				répondre à votre demande et ne sont pas conservées sur ce site ni
+				revendues à des tiers.
+			</p>
+
+			<h2>Mesure d'audience</h2>
+			<p>
+				Ce site n'utilise actuellement aucun outil d'analyse ni cookie de
+				suivi. TODO : mettre à jour cette section si un outil d'analyse
+				respectueux de la vie privée (Plausible, Umami) est ajouté par la
+				suite (§10 du brief).
+			</p>
+
+			<h2>Vos droits</h2>
+			<p>
+				Conformément au RGPD, vous pouvez demander l'accès, la rectification
+				ou la suppression des données vous concernant en écrivant à
+				contact@nicolasgurak.fr
+			</p>
+		</article>
+	</main>
+	<Footer />
+</Layout>

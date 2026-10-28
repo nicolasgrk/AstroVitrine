@@ -1,0 +1,45 @@
+---
+// TODO: accord écrit du client avant publication pour certains projets,
+// voir les commentaires dans chaque fichier src/content/realisations/*.md.
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+
+const projets = (await getCollection("realisations")).sort(
+	(a, b) => a.data.ordre - b.data.ordre,
+);
+---
+
+<section id="realisations" class="px-6 py-24 sm:px-10 lg:px-16">
+	<div class="mx-auto w-full max-w-5xl">
+		<h2 class="text-3xl font-black tracking-tight sm:text-5xl">
+			Des projets concrets, pas des maquettes.
+		</h2>
+		<div class="mt-16 grid gap-10 sm:grid-cols-2">
+			{
+				projets.map((projet) => (
+					<a
+						href={`/realisations/${projet.id}`}
+						data-reveal
+						class="group rounded-2xl border border-ink/10 p-6 transition-colors hover:border-accent/50"
+					>
+						{projet.data.image ? (
+							<div class="aspect-video overflow-hidden rounded-lg bg-ink/5">
+								<Image
+									src={projet.data.image}
+									alt={projet.data.titre}
+									width={640}
+									height={360}
+									class="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+								/>
+							</div>
+						) : (
+							<div class="aspect-video rounded-lg bg-ink/5" />
+						)}
+						<h3 class="mt-5 text-xl font-bold">{projet.data.titre}</h3>
+						<p class="mt-2 text-ink/70">{projet.data.resume}</p>
+					</a>
+				))
+			}
+		</div>
+	</div>
+</section>

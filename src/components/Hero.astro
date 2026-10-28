@@ -1,0 +1,96 @@
+---
+---
+
+<section
+	id="hero"
+	class="relative flex min-h-[min(90svh,760px)] flex-col justify-center overflow-hidden px-6 py-24 sm:px-10 lg:px-16"
+>
+	<div class="hero-glow-mask pointer-events-none absolute inset-0 -z-10">
+		<div
+			data-parallax="80"
+			data-float
+			class="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-accent/10 blur-3xl"
+		>
+		</div>
+		<div
+			data-parallax="50"
+			data-float
+			class="absolute -bottom-40 -left-24 h-80 w-80 rounded-full bg-accent-purple/10 blur-3xl"
+		>
+		</div>
+	</div>
+	<div class="mx-auto w-full max-w-5xl">
+		<h1
+			data-reveal
+			class="text-balance text-4xl font-black leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl"
+		>
+			Je crée des sites qui donnent envie d'appeler.
+		</h1>
+		<p data-reveal class="mt-6 max-w-xl text-lg text-ink/70 sm:text-xl">
+			Sites vitrines rapides et clairs, et outils métier sur mesure quand il
+			faut aller plus loin. Pour les TPE et PME qui veulent un site qui
+			travaille pour elles.
+		</p>
+		<div data-reveal class="mt-10">
+			<a
+				href="#contact"
+				class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-accent to-accent-purple px-8 py-4 text-base font-semibold text-white transition-[filter] hover:brightness-110"
+			>
+				Parlons de votre projet
+			</a>
+		</div>
+	</div>
+</section>
+
+<script>
+	import gsap from "gsap";
+	import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	const reducedMotion = window.matchMedia(
+		"(prefers-reduced-motion: reduce)",
+	).matches;
+
+	const targets = document.querySelectorAll("#hero [data-reveal]");
+
+	if (reducedMotion) {
+		gsap.set(targets, { opacity: 1, y: 0 });
+	} else {
+		gsap.from(targets, {
+			opacity: 0,
+			y: 24,
+			duration: 0.8,
+			ease: "power2.out",
+			stagger: 0.12,
+		});
+
+		document.querySelectorAll("#hero [data-parallax]").forEach((el) => {
+			const distance = Number(el.getAttribute("data-parallax")) || 0;
+			gsap.to(el, {
+				y: distance,
+				ease: "none",
+				scrollTrigger: {
+					trigger: "#hero",
+					start: "top top",
+					end: "bottom top",
+					scrub: true,
+				},
+			});
+		});
+
+		// Fond vivant : les halos dérivent en continu, indépendamment du
+		// scroll (le parallax ci-dessus anime uniquement l'axe Y, cette
+		// boucle anime x/scale pour ne pas entrer en conflit).
+		document.querySelectorAll("#hero [data-float]").forEach((el, i) => {
+			gsap.to(el, {
+				x: i % 2 === 0 ? 28 : -24,
+				scale: 1.12,
+				duration: 7 + i,
+				ease: "sine.inOut",
+				yoyo: true,
+				repeat: -1,
+			});
+		});
+	}
+</script>

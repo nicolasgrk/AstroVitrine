@@ -1,0 +1,36 @@
+---
+// Texte validé avec Nicolas (§13 du brief). Volontairement générique sur
+// l'employeur actuel (ni nom ni secteur), conformément au brief (§4).
+import { Image } from "astro:assets";
+import photo from "../assets/about.jpg";
+---
+
+<section id="apropos" class="px-6 py-24 sm:px-10 lg:px-16">
+	<div class="mx-auto flex w-full max-w-5xl flex-col items-start gap-10 sm:flex-row sm:items-center">
+		<Image
+			data-reveal
+			src={photo}
+			alt="Nicolas Gurak"
+			width={160}
+			height={160}
+			class="aspect-square w-32 shrink-0 rounded-full object-cover sm:w-40"
+		/>
+		<div data-reveal>
+			<h2 class="text-3xl font-black tracking-tight sm:text-5xl">À propos</h2>
+			<p class="mt-6 max-w-xl text-ink/70">
+				Je code depuis le lycée, en 2016, et j'ai lancé mon activité de
+				freelance en 2020. Entre temps, j'ai été développeur puis chef de
+				projet, en stage, en alternance, et aujourd'hui en parallèle dans une
+				entreprise éditrice de logiciels.
+			</p>
+			<p class="mt-4 max-w-xl text-ink/70">
+				Basé à Toulouse, je travaille avec des clients partout en France, à
+				distance. En dehors du code : passionné de musique et de nouvelles
+				technologies, j'ai un chat qui supervise (plus ou moins bien) mes
+				journées, et j'aime bricoler, construire des choses de mes mains. Un
+				site web, au fond, c'est un peu pareil : on part d'une idée, et on
+				construit, pièce par pièce, jusqu'à ce que ça tienne debout.
+			</p>
+		</div>
+	</div>
+</section>
